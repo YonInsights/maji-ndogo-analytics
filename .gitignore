@@ -216,3 +216,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+# Database & Portfolio Data Hygiene (Never commit raw database or notebook checkpoints)
+*.db
+*.sqlite
+*.sqlite3
+.ipynb_checkpoints/
