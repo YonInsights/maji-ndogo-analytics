@@ -1,1 +1,33 @@
+name: Portfolio Checks
 
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  portfolio-validation:
+    name: Validate Portfolio Structure & Hygiene
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Security Check - Ensure raw databases are excluded
+        run: |
+          echo "Checking repository for prohibited database files (*.db)..."
+          if find . -name "*.db" | grep -q .; then
+            echo "::error::Prohibited .db file detected in repository. Remove database files per portfolio rules."
+            exit 1
+          fi
+          echo "Security check passed: No raw database files detected."
+
+      - name: Structure Check - Verify case studies
+        run: |
+          echo "Verifying portfolio case studies..."
+          test -f README.md || exit 1
+          test -f 1_python_foundations/README.md || exit 1
+          test -f 2_oop_and_analysis/README.md || exit 1
+          echo "All portfolio checks passed successfully."
